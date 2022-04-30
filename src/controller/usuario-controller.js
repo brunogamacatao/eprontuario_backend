@@ -64,7 +64,6 @@ router.put('/:id', Seguranca.isAutenticado, findPorId, async (req, res) => {
    * Apenas administradores ou o próprio usuário pode mudar seus dados.
    */
   if (req.session.role === 'administrador' || req.session._id === req.params.id) {
-    console.log('body', req.body);
     let usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body);
     res.status(200).json({
       message: 'Usuário alterado com sucesso.',
