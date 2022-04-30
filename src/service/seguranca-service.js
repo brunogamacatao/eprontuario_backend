@@ -65,7 +65,7 @@ const isAutenticado = (req, res, next) => {
     }
     
     Usuario.findById(decoded.id, (err, usuario) => {
-      req.usuario = usuario;
+      req.session = usuario;
       next();
     });
   });
@@ -80,7 +80,7 @@ const podeAcessar = (roles) => {
     let pode = false;
 
     roles.forEach((role) => {
-      if (req.usuario.role === role) {
+      if (req.session.role === role) {
         pode = true;
       }
     });
@@ -99,7 +99,7 @@ const podeAcessar = (roles) => {
  */
 const hasRole = (role) => {
   return (req, res, next) => {
-    if (req.usuario.role === role) {
+    if (req.session.role === role) {
       next();
     } else {
       return res.status(401).send({ 

@@ -7,13 +7,13 @@ const boot = async () => {
   // Se não tem nenhum usuário cadastrado
   if (await Usuario.count() === 0) {
     // Cadastrar um usuário admin para testes
-    let dados = {email: 'admin@email.com', senha: 'admin', role: 'administrador'};
+    let dados = {nome: 'Administrador', email: 'admin@email.com', senha: 'admin', role: 'administrador'};
     dados.senha = await Seguranca.encripta(dados.senha);
 
     await Usuario(dados).save();
 
     // Cadastrar um usuário normal para testes
-    dados = {email: 'usuario@email.com', senha: 'usuario', role: 'usuario'};
+    dados = {nome: 'Usuário de Testes', email: 'usuario@email.com', senha: 'usuario', role: 'usuario'};
     dados.senha = await Seguranca.encripta(dados.senha);
 
     await Usuario(dados).save();

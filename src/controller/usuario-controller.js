@@ -8,15 +8,13 @@ router.get('/', Seguranca.isAutenticado, Seguranca.hasRole('administrador'), asy
   res.json(await Usuario.find());
 });
 
-router.get('/bloqueia/:id', Seguranca.isAutenticado, Seguranca.hasRole('administrador'), findPorId, async (req, res) => {
-  req.usuario.bloqueado = true;
-  await req.usuario.save();
+router.get('/bloqueia/:id', Seguranca.isAutenticado, Seguranca.hasRole('administrador'), async (req, res) => {
+  await Usuario.findByIdAndUpdate(req.params.id, {bloqueado: true});
   res.json({mensagem: 'Usuário bloqueado com sucesso'});
 });
 
-router.get('/desbloqueia/:id', Seguranca.isAutenticado, Seguranca.hasRole('administrador'), findPorId, async (req, res) => {
-  req.usuario.bloqueado = false;
-  await req.usuario.save();
+router.get('/desbloqueia/:id', Seguranca.isAutenticado, Seguranca.hasRole('administrador'), async (req, res) => {
+  await Usuario.findByIdAndUpdate(req.params.id, {bloqueado: false});
   res.json({mensagem: 'Usuário desbloqueado com sucesso'});
 });
 
@@ -55,10 +53,26 @@ router.post('/', Seguranca.isAutenticado, Seguranca.hasRole('administrador'), as
 
 router.delete('/:id', Seguranca.isAutenticado, Seguranca.hasRole('administrador'), findPorId, async (req, res) => {
   await req.usuario.remove();
+  res.status(200).json({
+    message: 'Usuário removido com sucesso.'
+  });
+
 });
 
-router.put('/:id', findPorId, async (req, res) => {
-  await req.usuario.set(req.body).save();
+router.put('/:id', Seguranca.isAutenticado, findPorId, async (req, res) => {
+  /*
+   * Apenas administradores ou o próprio usuário pode mudar seus dados.
+   */
+  if (req.session.role === 'administrador' || req.session._id === req.params.id) {
+    console.log('body', req.body);
+    let usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({
+      message: 'Usuário alterado com sucesso.',
+      usuario, usuario
+    });
+  } else {
+    res.status(403).send({auth: false, message: 'Você não tem autorização para alterar esse usuario'});
+  }
 });
 
 // função de middleware para recuperar um usuario pelo id
