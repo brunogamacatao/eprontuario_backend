@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     await Seguranca.validaLogin(usuario, req.body.senha);
 
     let token = Seguranca.criaToken(usuario);
-    res.status(200).json({ auth: true, token, role: usuario.role });
+    res.status(200).json({ auth: true, token, role: usuario.role, usuario: {nome: usuario.nome, email: usuario.email} });
   } catch (erro) {
     res.status(401).send({ auth: false, erro });
   }
