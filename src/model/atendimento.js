@@ -9,6 +9,7 @@ const atendimentoSchema = new mongoose.Schema({
   avaliacao: {type: String},
   plano: {type: String},
   local: { type: Schema.Types.ObjectId, ref: 'Local' },
+  paciente: { type: Schema.Types.ObjectId, ref: 'Paciente' },
 }, { 
   timestamps: true 
 });
