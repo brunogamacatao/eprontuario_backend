@@ -75,7 +75,7 @@ router.delete('/:id', Seguranca.isAutenticado, findPorSlug, async (req, res) => 
 });
 
 router.put('/:id', Seguranca.isAutenticado, findPorSlug, async (req, res) => {
-  let local = await Local.findByIdAndUpdate(req.params.id, req.body);
+  let local = await Local.findByIdAndUpdate(req.local._id, req.body);
   res.status(200).json({
     message: 'Local alterado com sucesso.',
     local: local
