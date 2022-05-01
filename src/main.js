@@ -23,6 +23,7 @@ app.use('/login', require('./controller/login-controller'));
 app.use('/usuarios', require('./controller/usuario-controller'));
 app.use('/locais', require('./controller/local-controller'));
 app.use('/pacientes', require('./controller/paciente-controller'));
+app.use('/atendimentos', require('./controller/atendimento-controller'));
 
 console.log('Conectando ao banco de dados ...');
 db.conecta(() => {
